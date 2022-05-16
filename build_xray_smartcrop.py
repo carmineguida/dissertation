@@ -1,4 +1,3 @@
-import sys
 import math
 import random
 import csv
@@ -26,11 +25,6 @@ CENTER_POINT_OFFSET = [10, 0]
 CROP_WIDTH = 600
 CROP_HEIGHT = 220
 
-def get_cols(line, c=','):
-    line = line.replace('\n', '').replace('\"', '')
-    cols = line.split(c)
-    return cols
-
 def load_dict_from_file(filepath):
     d = {}
     with open(filepath, 'r') as f:
@@ -44,20 +38,10 @@ def load_dimeta():
     dataset = {}
 
     f = open(DIMETA_PATH, 'r')
-    line = f.readline()
-    fields = get_cols(line)
-    id_col = fields.index('case_id')
-    spacing_col = fields.index('spacing_0')
-
-    while True:
-        line = f.readline()
-        if (line is None):
-            break
-        cols = get_cols(line)
-        if (len(cols) < len(fields)):
-            break
-        case_id = cols[id_col]
-        spacing = cols[spacing_col]
+    reader = csv.DictReader(f)
+    for row in reader:
+        case_id = row['case_id']
+        spacing = row['spacing_0']
         dataset[case_id] = float(spacing)
     f.close()
     return dataset
@@ -66,29 +50,13 @@ def load_dataset(dimeta):
     dataset = []
     
     f = open(DATA_CSV_PATH, 'r')
-    line = f.readline()
-    fields = get_cols(line)
-
-    id_col = fields.index(ID_COL)
-    side_col = fields.index(SIDE_COL)
-    kl_col = fields.index(KL_COL)
-
-    while True:
-        line = f.readline()
-        if (line is None):
-            break
-        cols = get_cols(line)
-        if (len(cols) < len(fields)):
-            break
-
-        case_id = cols[id_col]
-        side = cols[side_col]
-        kl = cols[kl_col]
+    reader = csv.DictReader(f);
+    for row in reader:
+        case_id = row[ID_COL]
+        side = row[SIDE_COL]
+        kl = row[KL_COL]
         
         data = {'case_id':case_id, 'side':side, 'kl':kl, 'spacing':dimeta[case_id]}
-
-        full_id = case_id + '_' + side
-
         dataset.append(data)
 
     f.close()
@@ -185,6 +153,7 @@ def save_set(dataset, count, path):
     error_count = 0
 
     for i in range(count):
+        print(path, i + 1, 'of', count)
         data = dataset.pop(0)
 
         case_id = data['case_id']
