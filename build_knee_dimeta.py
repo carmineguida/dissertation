@@ -1,4 +1,3 @@
-import random
 import csv
 import pydicom
 
@@ -11,20 +10,13 @@ XRAY_IMAGE_PATH_PREFIX = 's3://NDAR_Central_2/submission_13305/00m/'
 XRAY_CSV_OUTPUT_PATH = 'oai100xray.csv'
 
 IMAGE_FILE_PATH = './OAINonImaging/image03.txt'
-
 IMAGE_BASE_PATH = './OAIScreeningImages/results/'
-
 IMAGE_ID_COL = 'src_subject_id'
 IMAGE_TYPE_COL = 'image_description'
 IMAGE_PATH_COL = 'image_file'
-
 IMAGE_PATH_PREFIX = 's3://NDAR_Central_1/submission_13364/00m/'
-
 IMAGE_GROUP_1 = '0.E.1'
 IMAGE_GROUP_2 = '0.C.2'
-
-NUM_CLASSES = 5
-PER_CLASS = 20
 
 USE_ID_COL = 'case_id'
 
